@@ -36,6 +36,13 @@ func (e *Employee) updateName(newName string) {
 	e.Name = newName
 }
 
+// struct with JSON tags
+type User struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Age      int    `json:"age"`
+}
+
 func main() {
 	address := Address{
 		Street: "123 mayor street",
@@ -66,5 +73,15 @@ func main() {
 	jsonData, _ := json.Marshal(employee1)
 	// fmt.Println(jsonData) //returns the encoded data as bytes
 	fmt.Println(string(jsonData)) //returns the encoded data as json {"name":"brandon","age":10,"isRemote":false,"street":"123 mayor street","city":"Buea"}
+
+	//json deserialisation
+	//note previousely, we had a struct where we serialised the struct data and printed the json object
+	//now we will do the reverse
+
+	jsonString := `{"username":"ichami","email":"brandonichami@gmail.com","age":10}`
+
+	var user User
+	json.Unmarshal([]byte(jsonString), &user)
+	fmt.Println(user.Username, user.Email, user.Age)
 
 }
