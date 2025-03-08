@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 /*
 when declaring a struct, the name of the struct has a lot to tell about the scope the struct
@@ -10,11 +13,13 @@ same applies to the variables or fields in the struct
 
 we declare a struct using the type keyword followed by the name of the struct and the struct keyword
 */
+
+// structs with JSON tags
 type Employee struct {
-	name     string
-	age      int
-	isRemote bool
-	Address  //embedded struct
+	Name     string `json:"name"`
+	Age      int    `json:"age"`
+	IsRemote bool   `json:"isRemote"`
+	Address         //embedded struct
 }
 
 /*
@@ -22,13 +27,13 @@ Embedded structs (Inheritance in Go)
 Go doesn't have class inheritance, but you can embed one struct inside another
 */
 type Address struct {
-	Street string
-	City   string
+	Street string `json:"street"`
+	City   string `json:"city"`
 }
 
 // func to update the name in the struct
 func (e *Employee) updateName(newName string) {
-	e.name = newName
+	e.Name = newName
 }
 
 func main() {
@@ -37,13 +42,13 @@ func main() {
 		City:   "Buea",
 	}
 	employee1 := Employee{
-		name:     "ichami",
-		age:      10,
-		isRemote: false,
+		Name:     "ichami",
+		Age:      10,
+		IsRemote: false,
 		Address:  address,
 	}
 	employee1.updateName("brandon")
-	fmt.Println("Employee name ", employee1.name, " is ", employee1.age, " and remote working is ", employee1.isRemote)
+	fmt.Println("Employee name ", employee1.Name, " is ", employee1.Age, " and remote working is ", employee1.IsRemote)
 	fmt.Println("an embedded struct fields:", employee1.Street) //accessing embedded fields
 
 	//declaring an anonymous struct
@@ -56,4 +61,10 @@ func main() {
 	}
 
 	fmt.Println("job:", job.title, "salary:", job.salary)
+
+	//tags
+	jsonData, _ := json.Marshal(employee1)
+	// fmt.Println(jsonData) //returns the encoded data as bytes
+	fmt.Println(string(jsonData)) //returns the encoded data as json {"name":"brandon","age":10,"isRemote":false,"street":"123 mayor street","city":"Buea"}
+
 }
